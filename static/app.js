@@ -58,6 +58,15 @@ function startEditing(todo, titleSpan) {
   input.addEventListener("blur", () => finish(true));
 }
 
+function formatDate(isoString) {
+  return new Date(isoString).toLocaleString(undefined, {
+    day: "numeric",
+    month: "short",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
 function render(todos) {
   list.replaceChildren();
   for (const todo of todos) {
@@ -77,12 +86,17 @@ function render(todos) {
     title.title = "Double-click to rename";
     title.addEventListener("dblclick", () => startEditing(todo, title));
 
+    const created = document.createElement("time");
+    created.className = "created";
+    created.dateTime = todo.created_at;
+    created.textContent = formatDate(todo.created_at);
+
     const remove = document.createElement("button");
     remove.className = "delete";
     remove.textContent = "Delete";
     remove.addEventListener("click", () => run(() => api(`/${todo.id}`, { method: "DELETE" })));
 
-    item.append(checkbox, title, remove);
+    item.append(checkbox, title, created, remove);
     list.append(item);
   }
 

@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, HTTPException, Response
@@ -30,9 +31,12 @@ class Todo(BaseModel):
     id: int
     title: str
     done: bool
+    created_at: datetime
 
 def to_todo(row):
-    return Todo(id=row["id"], title=row["title"], done=bool(row["done"]))
+    # SQLite stores CURRENT_TIMESTAMP in UTC without a timezone, so mark it as UTC
+    created_at = datetime.fromisoformat(row["created_at"]).replace(tzinfo=timezone.utc)
+    return Todo(id=row["id"], title=row["title"], done=bool(row["done"]), created_at=created_at)
 
 def find_todo(db, todo_id):
     row = db.execute("SELECT * FROM todos WHERE id = ?", (todo_id,)).fetchone()
