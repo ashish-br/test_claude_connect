@@ -1,23 +1,39 @@
 # test_claude_connect
 
-A test repo for writing code from the Claude desktop app and pushing it from Git Bash.
+A simple to-do app: a FastAPI backend with a SQLite database, and a plain HTML/JavaScript front end.
+
+## Setup (once)
+
+Create a virtual environment and install the packages into it:
+
+```bash
+python -m venv .venv
+source .venv/Scripts/activate
+pip install -r requirements-dev.txt
+```
+
+In a new terminal, run `source .venv/Scripts/activate` again before the commands below.
 
 ## Run the app
 
 ```bash
-python server.py
+uvicorn main:app --reload
 ```
 
-Then open http://127.0.0.1:8000 in your browser. Press Ctrl+C in the terminal to stop the server.
+Open http://127.0.0.1:8000 in your browser. `--reload` restarts the server when you save a file. Press Ctrl+C to stop it.
 
-## Run the script on its own
+Interactive API docs are at http://127.0.0.1:8000/docs.
+
+## Run the tests
 
 ```bash
-python hello.py
+pytest
 ```
 
 ## Files
 
-- `hello.py` – builds the greeting (used by the server and runnable on its own)
-- `server.py` – backend: serves the UI and the `/api/hello` endpoint
-- `static/` – front-end: `index.html`, `style.css`, `app.js`
+- `main.py` – the API: list, add, update and delete to-dos under `/api/todos`
+- `database.py` – opens the SQLite database (`todos.db`, created on first run)
+- `static/` – front end: `index.html`, `style.css`, `app.js`
+- `tests/` – automated tests for the API
+- `requirements.txt` – packages the app needs; `requirements-dev.txt` adds the testing tools

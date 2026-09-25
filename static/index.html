@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hello App</title>
+  <title>To-do</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main>
-    <h1>Hello App</h1>
-    <form id="greet-form">
-      <input id="name" type="text" placeholder="Your name" maxlength="50">
-      <button type="submit">Say hello</button>
+    <h1>To-do</h1>
+    <form id="add-form">
+      <input id="new-title" type="text" placeholder="What needs doing?" maxlength="200" required>
+      <button type="submit">Add</button>
     </form>
-    <p id="message"></p>
-    <p id="time"></p>
+    <p id="error" hidden></p>
+    <ul id="todo-list"></ul>
+    <p id="summary"></p>
   </main>
   <script src="app.js"></script>
 </body>
