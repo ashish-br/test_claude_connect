@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta, timezone
+
 def add(client, title):
     return client.post("/api/todos", json={"title": title}).json()
 
@@ -9,7 +11,13 @@ def test_list_starts_empty(client):
 def test_create_todo(client):
     response = client.post("/api/todos", json={"title": "Buy milk"})
     assert response.status_code == 201
-    assert response.json() == {"id": 1, "title": "Buy milk", "done": False}
+    todo = response.json()
+    assert {key: todo[key] for key in ("id", "title", "done")} == {"id": 1, "title": "Buy milk", "done": False}
+
+def test_created_at_is_current_utc_time(client):
+    created_at = datetime.fromisoformat(add(client, "Buy milk")["created_at"])
+    assert created_at.tzinfo is not None
+    assert abs(datetime.now(timezone.utc) - created_at) < timedelta(minutes=1)
 
 def test_create_strips_whitespace(client):
     assert add(client, "  Buy milk  ")["title"] == "Buy milk"
