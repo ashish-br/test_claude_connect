@@ -42,7 +42,7 @@ def find_todo(db, todo_id):
 
 @app.get("/api/todos")
 def list_todos(db=Depends(get_db)) -> list[Todo]:
-    rows = db.execute("SELECT * FROM todos ORDER BY id").fetchall()
+    rows = db.execute("SELECT * FROM todos ORDER BY done, id").fetchall()
     return [to_todo(row) for row in rows]
 
 @app.post("/api/todos", status_code=201)
